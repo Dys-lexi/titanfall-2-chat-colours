@@ -2,8 +2,6 @@ import keyboard
 import random
 import pyperclip
 import time
-
-
 def random_ansi_color_code():
     while True:
         colour = random.randint(0, 255)
@@ -13,7 +11,6 @@ def random_ansi_color_code():
 
     choice = "[38;5;"+str(colour)+"m"
     return choice
-
 
 def code_words(characters):
     message = ""+random_ansi_color_code()
@@ -37,15 +34,9 @@ def code_characters(characters):
             message += character
     return message
 
-
-
-
-
 def main():
-
     event = keyboard.read_event()
-    # if the key pressed is a "T"
-    if event.event_type == keyboard.KEY_UP and event.name in '[]]':
+    if event.event_type == keyboard.KEY_UP and event.name in '[]':
         keyboard.press('ctrl')
         keyboard.press('a')
         keyboard.release('a')
@@ -55,11 +46,12 @@ def main():
         keyboard.release('ctrl')
         keyboard.press('backspace')
         characters = list(pyperclip.paste())[:-1]
+
         if event.name == "[":
             message = code_words(characters)
         elif event.name == "]":
             message = code_characters(characters)
-        
+
         if len(message) > 250:
             print("message too long, word by word done")
             message = code_words(characters)
@@ -71,10 +63,7 @@ def main():
         keyboard.release('ctrl')
         print(message+"\x1b[0m")
 
-
-# 250
 print("tf|2chattyper by dyslexi\n")
-
 print("] is character by character, [ is word by word")
 if __name__ == "__main__":
     while True:
