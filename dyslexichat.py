@@ -12,7 +12,9 @@ while Colourroot[a] != "K":
 Colourroot = "".join(b)
 def main():
     event = keyboard.read_event()
-    if event.event_type == keyboard.KEY_UP and event.name in '#[]':
+    if not event.name:
+        return
+    if event.event_type == keyboard.KEY_UP and event.name in '#[]&':
         keyboard.press('ctrl')
         keyboard.press('a')
         keyboard.release('a')
@@ -24,11 +26,14 @@ def main():
         try:
             r = re.post(Colourroot, json = {'message': characters,"style":event.name})
             message = r.json()["message"]
-            if r.json()["code"] != "ok":
+            if "ok" not in r.json()["code"]:
                 print(r.json()["code"])
                 return
+            elif "ok" != r.json()["code"]:
+                print(r.json()["code"])
         except Exception as e:
             print("broken, yell at lexi")
+            #print(e)
             return
         keyboard.press('backspace')
         pyperclip.copy(message)
@@ -38,10 +43,10 @@ def main():
         keyboard.release('ctrl')
         keyboard.press('enter')
         keyboard.release('enter')
-        print(message+"\x1b[0m")
+        print(message)
         #print((message.replace("[38;;", "").replace("m", "")).upper())
 print("tf|2chattyper by dyslexi\n")
-print("] is character by character, [ is word by word, # is automagic highlighting :O")
+print("] is character by character, [ is word by word, # is automagic highlighting :O (& also may be used in future)")
 if __name__ == "__main__":
     while True:
         main()
