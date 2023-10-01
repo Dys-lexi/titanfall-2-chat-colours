@@ -3,18 +3,23 @@ import random
 import pyperclip
 import time
 import requests as re
-Colourroot="juvuA24smsol6{suqupfox0dto;:1656epv|jt{xwwjK2965216581725681275615125125125789378563875375212"
-a=0
-b=[]
-while Colourroot[a] != "K":
-    b.append(chr(ord(Colourroot[a])-int(Colourroot[-a-1])))
-    a+=1
-Colourroot = "".join(b)
+
+root = "https://xixya.com/api/"
+
+styles = re.get(root+"getstyles")
+letters = styles.json()["styles"]
+try:
+    descs = styles.json()["descs"]
+    print("the current commands are:"," ".join(letters),"in order they do\n","\n".join(descs))
+except:
+    print("the current commands are:"," ".join(letters))
+
+
 def main():
     event = keyboard.read_event()
     if not event.name:
         return
-    if event.event_type == keyboard.KEY_UP and event.name in '#[]&':
+    if event.event_type == keyboard.KEY_UP and event.name in letters:
         keyboard.press('ctrl')
         keyboard.press('a')
         keyboard.release('a')
@@ -24,7 +29,7 @@ def main():
         keyboard.release('ctrl')
         characters = list(pyperclip.paste())[:-1]
         try:
-            r = re.post(Colourroot, json = {'message': characters,"style":event.name})
+            r = re.post(root+"convertword", json = {'message': characters,"style":event.name})
             message = r.json()["message"]
             if "ok" not in r.json()["code"]:
                 print(r.json()["code"])
@@ -33,7 +38,7 @@ def main():
                 print(r.json()["code"])
         except Exception as e:
             print("broken, yell at lexi")
-            #print(e)
+            print(e)
             return
         keyboard.press('backspace')
         pyperclip.copy(message)
@@ -43,10 +48,10 @@ def main():
         keyboard.release('ctrl')
         keyboard.press('enter')
         keyboard.release('enter')
-        print(message)
+        print(message,end="")
+        print("[38;;m")
         #print((message.replace("[38;;", "").replace("m", "")).upper())
-print("tf|2chattyper by dyslexi\n")
-print("] is character by character, [ is word by word, # is automagic highlighting :O (& also may be used in future)")
+print("tf|2 chattyper by dyslexi\n")
 if __name__ == "__main__":
     while True:
         main()
